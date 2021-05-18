@@ -2,6 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 ext {
+    PUBLISH_GROUP_ID = 'com.hold1'
+    PUBLISH_ARTIFACT_ID = 'keyboardheightprovider'
+    PUBLISH_VERSION = '0.0.9'
+}
+
+ext {
     bintrayRepo = 'Android'
     bintrayName = 'KeyboardHeightProvider'
 
@@ -35,11 +41,13 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        // classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     }
 }
 
-apply plugin: 'com.jfrog.bintray'
+// apply plugin: 'com.jfrog.bintray'
+
+apply plugin: 'maven-publish'
 
 
 android {
@@ -76,6 +84,7 @@ dependencies {
 
 }
 
+/*
 install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
@@ -111,17 +120,17 @@ install {
         }
     }
 }
-
+*/
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
 }
 
+/*
 artifacts {
     archives sourcesJar
 }
-
 
 bintray {
     user = BINTRAY_USER
@@ -145,7 +154,26 @@ bintray {
         }
     }
 }
-
+*/
 repositories {
+	mavenLocal()
     mavenCentral()
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = 'com.hold1'
+                artifactId = 'keyboardheightprovider'
+                version = '0.0.9'
+
+                // Applies the component for the release build variant.
+                from components.release
+            }
+        }
+    }
 }
